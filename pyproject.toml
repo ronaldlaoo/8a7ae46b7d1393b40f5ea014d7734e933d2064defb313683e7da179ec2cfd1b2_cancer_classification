@@ -1,0 +1,14 @@
+[project]
+name = "8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2-cancer-classification"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "matplotlib>=3.10.3",
+    "notebook>=7.4.4",
+    "numpy>=2.3.1",
+    "pandas>=2.3.1",
+    "scikit-learn>=1.7.0",
+    "seaborn>=0.13.2",
+]
