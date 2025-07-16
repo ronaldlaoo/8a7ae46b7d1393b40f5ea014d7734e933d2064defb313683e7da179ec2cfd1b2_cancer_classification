@@ -6,6 +6,8 @@ repos:
         args: [--fix]
 
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.6.1  # Use latest version
+    rev: 0.6.1
     hooks:
       - id: nbstripout
+        always_run: true      
+        files: \.ipynb$     
