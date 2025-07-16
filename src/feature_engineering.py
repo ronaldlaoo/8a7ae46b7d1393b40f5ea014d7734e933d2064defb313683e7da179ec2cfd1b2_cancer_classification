@@ -3,6 +3,9 @@ from itertools import combinations
 
 
 def add_features(X):
+    """
+    Create new features by multiplying pairs of existing features.
+    """
     new_X = X.copy()
 
     # Store new features in a dict first
