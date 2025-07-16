@@ -41,7 +41,7 @@ To run this project:
 │   ├── evaluation.py
 │   └── run_pipeline.py
 ```
-notebooks folder contains the EDA and the Jupyter notebooks. I created Jupyter versions of the different stages of the pipeline to allow me to run the different sections easier for troubleshooting. The same functions can be found in the src folder 
+notebooks folder contains the EDA and the Jupyter notebooks. I created Jupyter versions of the different stages of the pipeline to allow me to run the different sections easier for troubleshooting. The same functions can be found in the src folder and are later accessed in the run_pipeline.py file.
 
 ## Pre-commit Configuration  
 The following pre-commit hooks were used:
@@ -51,4 +51,4 @@ The following pre-commit hooks were used:
 These pre-commit hooks were selected to ensure code quality and maintain a lightweight repository by removing notebook outputs.
 
 ## Reflection
-Since it's my first time using pre-commit hooks, resolving the flags by the pre-commit hooks were both easy and a bit difficult at the same time. It was difficult in a sense that these are things I do not consider when coding so it's a bit tricky to figure out what it was flagging, but they're also easy to resolve.
+Since it's my first time using pre-commit hooks, resolving the flags by the pre-commit hooks were both easy and a bit difficult at the same time. It was difficult in a sense that these are things I do not consider when coding so it's a bit tricky to figure out what it was flagging, but they're also easy to resolve once you find them.
