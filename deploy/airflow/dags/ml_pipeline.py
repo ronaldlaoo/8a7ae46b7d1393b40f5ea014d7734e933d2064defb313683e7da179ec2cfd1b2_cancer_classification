@@ -89,14 +89,14 @@ with DAG(
         python_callable=t_preprocess,
     )
 
-    train = PythonOperator(
+    train_model = PythonOperator(
         task_id="train_model",
         python_callable=t_train_model,
     )
 
-    evaluate = PythonOperator(
+    evaluate_model = PythonOperator(
         task_id="evaluate_model",
         python_callable=t_evaluate_model,
     )
 
-    preprocess >> train >> evaluate
+    preprocess >> train_model >> evaluate_model
