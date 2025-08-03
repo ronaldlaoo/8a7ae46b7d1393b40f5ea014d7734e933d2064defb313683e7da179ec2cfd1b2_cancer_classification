@@ -8,6 +8,5 @@ repos:
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1
     hooks:
-      - id: nbstripout
-        always_run: true      
+      - id: nbstripout  
         files: \.ipynb$     
