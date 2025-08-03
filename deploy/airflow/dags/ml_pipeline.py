@@ -26,6 +26,16 @@ REPORT_PATH = Path("/opt/airflow/reports/metrics.txt")
 
 
 def t_preprocess():
+    """
+    Preprocess the cancer dataset by scaling features and splitting into train/test sets.
+
+    Loads data from `DATA_PATH`, scales features using `StandardScaler`,
+    and saves the split dataset to `SPLIT_PATH` using joblib.
+
+    Returns
+    -------
+    None
+    """
     from sklearn.preprocessing import StandardScaler
     from sklearn.model_selection import train_test_split
 
@@ -44,6 +54,16 @@ def t_preprocess():
 
 
 def t_train_model():
+    """
+    Train a RandomForestClassifier on the preprocessed training data.
+
+    Loads training data from `SPLIT_PATH`, applies feature engineering,
+    and saves the trained model to `MODEL_PATH` using pickle.
+
+    Returns
+    -------
+    None
+    """
     X_train, _, y_train, _ = joblib.load(SPLIT_PATH)
     X_train = add_features(X_train)
 
@@ -58,6 +78,16 @@ def t_train_model():
 
 
 def t_evaluate_model():
+    """
+    Evaluate the trained model on the test set.
+
+    Loads the test set and trained model from `SPLIT_PATH` and `MODEL_PATH` respectively,
+    applies feature engineering, computes accuracy, and saves the result to `REPORT_PATH`.
+
+    Returns
+    -------
+    None
+    """
     _, X_test, _, y_test = joblib.load(SPLIT_PATH)
     X_test = add_features(X_test)
 
