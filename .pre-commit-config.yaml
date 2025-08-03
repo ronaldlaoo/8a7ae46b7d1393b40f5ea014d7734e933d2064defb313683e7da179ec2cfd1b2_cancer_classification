@@ -1,3 +1,4 @@
+---
 repos:
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.4.0
@@ -9,5 +10,18 @@ repos:
     rev: 0.6.1
     hooks:
       - id: nbstripout
-        always_run: true      
-        files: \.ipynb$     
+        files: \.ipynb$
+
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint
+        name: Dockerfile linter
+        files: ^Dockerfile$
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.32.0
+    hooks:
+      - id: yamllint
+        name: YAML linter
+        files: \.ya?ml$

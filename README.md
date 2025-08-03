@@ -1,30 +1,60 @@
 # 8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2_cancer_classification
 
 ## Project Overview  
-The main objective of this repository is to develop a production driven DS project rather than focusing on improving the model accuracy. I selected the Breast Cancer dataset from sklearn because it's small in size, readily available in sklearn.dataset, and I personally want to explore more on health applications.
+The main objective of this repository is to develop a production driven DS project rather than focusing on improving the model accuracy. I selected the Breast Cancer dataset from sklearn because it's small in size, readily available in sklearn.dataset, and I personally want to explore more on health applications. This classification model allows us to identify whether a mass is considered malignant or benign.
 
-## How to Get the Data  
-It is based on the [Breast Cancer Wisconsin Dataset](https://scikit-learn.org/stable/datasets/toy_dataset.html#breast-cancer-dataset) from sklearn. It is already provided in data/raw/cancer_dataset.csv for convenience, so no additional download is needed.
+We've utlized Docker to containerize the pipeline for reproducibility with different machines because it ensures consistency of environment in the containers. We also used Airflow for orchestration that allows users to define and schedule pipelines through DAGs. This enables automatic retries for failed tasks and ensures that our ML pipelines can run reliably. 
 
 ## Setup Instructions  
-To run this project:
 
-1. Create a virtual environment using [UV](https://github.com/astral-sh/uv):  
+## Docker
+1. Download Docker desktop (https://docs.docker.com/desktop/setup/install/windows-install/):  
+2. Create Dockerfile (in ./deploy/docker)
+3. Build the image
    ```bash
-   uv venv .venv
-   uv pip install -r requirements.txt
+   docker build -t 8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2_ml-pipeline
    ```
+4. Run container
+   ```bash
+   docker run --rm `
+   -v "$(Get-Location)\data:/app/data" `
+   -v "$(Get-Location)\models:/app/models" `
+   8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2-ml-pipeline
+   ```   
+This Dockerfile sets up a lightweight container for running the ML pipeline using Python 3.12 and the uv package manager.
+   ```
+   FROM python:3.12-slim
 
-2. Install `pre-commit` and configure hooks:
-   ```bash
-   uv pip install pre-commit
-   pre-commit install
-   ```
+   WORKDIR /app
+   Sets the working directory inside the container.
 
-3. Run the pipeline:
-   ```bash
-   python src/run_pipeline.py
+   RUN pip install --upgrade pip && pip install 'uv[cli]' --upgrade
+   Installs the latest versions of pip and uv, a fast Python package manager.
+
+   COPY . .
+   Copies the entire project directory into the container's working directory.
+
+   RUN uv pip install --editable . --verbose --python /usr/local/bin/python
+   Installs all project dependencies and explicitly tells uv to use the Python in the Docker image.
+
+   CMD ["python", "src/run_pipeline.py"]
+   Specifies the default command to run the main pipeline script.
+
    ```
+## Airflow
+**DAG Structure**
+The DAG (`ml_pipeline.py`) consists of the following tasks:
+
+- `preprocess`: Loads the breast cancer dataset 
+- `train_model`: Performs feature engineering on the train split and trains a Random Forest classifier 
+- `evaluate_model`: Performs feature engineering on the test split before making predictions and then evaluates model accuracy  
+
+**Task Dependencies**
+preprocess →  → train_model → evaluate_model
+
+**Scheduling**
+The DAG uses `schedule_interval='@once'`, which means it runs a single time when triggered suitable for initial testing or ad hoc runs.
+
 
 ## Folder Structure
 
@@ -40,15 +70,32 @@ To run this project:
 │   ├── model_training.py
 │   ├── evaluation.py
 │   └── run_pipeline.py
+├── deploy/
+│   ├── docker
+│   │   ├── Dockerfile    # Defines the container environment 
+│   ├── airflow
+│   │   ├── config
+│   │   ├── dags          # DAG definitions for orchestrating pipeline tasks  
+│   │   ├── logs
+│   │   ├── plugisn
 ```
-notebooks folder contains the EDA and the Jupyter notebooks. I created Jupyter versions of the different stages of the pipeline to allow me to run the different sections easier for troubleshooting. The same functions can be found in the src folder and are later accessed in the run_pipeline.py file.
+- Notebooks folder contains the EDA and the Jupyter notebooks. I created Jupyter versions of the different stages of the pipeline to allow me to run the different sections easier for troubleshooting. The same functions can be found in the src folder and are later accessed in the run_pipeline.py file.
+- Grouped everything deployment-related under `deploy/` to keep it tidy and easier to locate anything that is for orchestration.
+- `deploy/docker/` cleanly separates container setup from everything else
+- `airflow/dags/` keeps the orchestration logic separate from the ML code
+
+
 
 ## Pre-commit Configuration  
 The following pre-commit hooks were used:
 - **ruff**: Ensures consistent formatting and linting.
 - **nbstripout**: Strips output from Jupyter notebooks before committing.
+- **hadolint**: Lints Dockerfiles to enforce best practices and catch errors.
+- **yamllint**: Lints YAML files for syntax errors and style issues.
 
 These pre-commit hooks were selected to ensure code quality and maintain a lightweight repository by removing notebook outputs.
 
 ## Reflection
-Since it's my first time using pre-commit hooks, resolving the flags by the pre-commit hooks were both easy and a bit difficult at the same time. It was difficult in a sense that these are things I do not consider when coding so it's a bit tricky to figure out what it was flagging, but they're also easy to resolve once you find them (only found out that ruff can autofix issues a lot later).
+This homework was extremely difficult to work on for me. Encountered a lot of issues early on with just creating the Dockerfile and building the image because of a venv issue that was fixed by adding '--python /usr/local/bin/python' because uv didn't know which interpreter to use. 
+
+For the Airflow part, I have scripts from src that I believe should have worked but my test runs kept on failing. I decided to just recreate the same functions in ml_pipeline so I wouldn't run into any more path issues even though I'm pretty sure it's not good practice. I've tested the individual tasks in CLI and saw them work with no problems. However, when I try to manually trigger in UI, it just keeps failing and I'm still not sure what's causing it because the logs don't really show any messages for some reason even though I've tried several things to make the logs show.
