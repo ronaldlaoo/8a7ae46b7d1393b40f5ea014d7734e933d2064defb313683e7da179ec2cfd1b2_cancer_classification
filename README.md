@@ -3,28 +3,22 @@
 ## Project Overview  
 The main objective of this repository is to develop a production driven DS project rather than focusing on improving the model accuracy. I selected the Breast Cancer dataset from sklearn because it's small in size, readily available in sklearn.dataset, and I personally want to explore more on health applications.
 
-## How to Get the Data  
-It is based on the [Breast Cancer Wisconsin Dataset](https://scikit-learn.org/stable/datasets/toy_dataset.html#breast-cancer-dataset) from sklearn. It is already provided in data/raw/cancer_dataset.csv for convenience, so no additional download is needed.
-
+We've 
 ## Setup Instructions  
-To run this project:
 
-1. Create a virtual environment using [UV](https://github.com/astral-sh/uv):  
+1. Download Docker desktop (https://docs.docker.com/desktop/setup/install/windows-install/):  
+2. Create Dockerfile (in ./deploy/docker) to
+3. Build the image
    ```bash
-   uv venv .venv
-   uv pip install -r requirements.txt
+   docker build -t 8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2_ml-pipeline
    ```
-
-2. Install `pre-commit` and configure hooks:
+4. Run container
    ```bash
-   uv pip install pre-commit
-   pre-commit install
-   ```
-
-3. Run the pipeline:
-   ```bash
-   python src/run_pipeline.py
-   ```
+   docker run --rm `
+   -v "$(Get-Location)\data:/app/data" `
+   -v "$(Get-Location)\models:/app/models" `
+   8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2-ml-pipeline
+   ```   
 
 ## Folder Structure
 
@@ -40,8 +34,16 @@ To run this project:
 │   ├── model_training.py
 │   ├── evaluation.py
 │   └── run_pipeline.py
+├── deploy/
+│   ├── docker
+│   ├── airflow
+│   │   ├── config
+│   │   ├── dags
+│   │   ├── logs
+│   │   ├── plogins
 ```
-notebooks folder contains the EDA and the Jupyter notebooks. I created Jupyter versions of the different stages of the pipeline to allow me to run the different sections easier for troubleshooting. The same functions can be found in the src folder and are later accessed in the run_pipeline.py file.
+Notebooks folder contains the EDA and the Jupyter notebooks. I created Jupyter versions of the different stages of the pipeline to allow me to run the different sections easier for troubleshooting. The same functions can be found in the src folder and are later accessed in the run_pipeline.py file.
+
 
 ## Pre-commit Configuration  
 The following pre-commit hooks were used:
