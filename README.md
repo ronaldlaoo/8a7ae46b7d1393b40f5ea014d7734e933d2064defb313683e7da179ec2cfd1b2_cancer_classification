@@ -9,7 +9,7 @@ We've utlized Docker to containerize the pipeline for reproducibility with diffe
 
 ## Docker
 1. Download Docker desktop (https://docs.docker.com/desktop/setup/install/windows-install/):  
-2. Create Dockerfile (in ./deploy/docker) to
+2. Create Dockerfile (in ./deploy/docker)
 3. Build the image
    ```bash
    docker build -t 8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2_ml-pipeline
