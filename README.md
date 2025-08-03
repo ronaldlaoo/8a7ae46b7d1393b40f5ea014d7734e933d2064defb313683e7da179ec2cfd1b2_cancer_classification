@@ -6,6 +6,7 @@ The main objective of this repository is to develop a production driven DS proje
 We've 
 ## Setup Instructions  
 
+## Docker
 1. Download Docker desktop (https://docs.docker.com/desktop/setup/install/windows-install/):  
 2. Create Dockerfile (in ./deploy/docker) to
 3. Build the image
@@ -19,6 +20,29 @@ We've
    -v "$(Get-Location)\models:/app/models" `
    8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2-ml-pipeline
    ```   
+This Dockerfile sets up a lightweight container for running the ML pipeline using Python 3.12 and the uv package manager.
+
+FROM python:3.12-slim
+Uses a minimal Python 3.12 base image to keep the container small.
+
+WORKDIR /app
+Sets the working directory inside the container.
+
+RUN pip install --upgrade pip && pip install 'uv[cli]' --upgrade
+Installs the latest versions of pip and uv, a fast Python package manager.
+
+COPY . .
+Copies the entire project directory into the container's working directory.
+
+RUN uv pip install --editable . --verbose --python /usr/local/bin/python
+Installs all project dependencies defined in pyproject.toml in editable mode using uv.
+
+CMD ["python", "src/run_pipeline.py"]
+Specifies the default command to run the main pipeline script.
+
+## Airflow
+
+
 
 ## Folder Structure
 
@@ -49,8 +73,12 @@ Notebooks folder contains the EDA and the Jupyter notebooks. I created Jupyter v
 The following pre-commit hooks were used:
 - **ruff**: Ensures consistent formatting and linting.
 - **nbstripout**: Strips output from Jupyter notebooks before committing.
+- **hadolint**: Lints Dockerfiles to enforce best practices and catch errors.
+- **yamllint**: Lints YAML files for syntax errors and style issues.
 
 These pre-commit hooks were selected to ensure code quality and maintain a lightweight repository by removing notebook outputs.
 
 ## Reflection
-Since it's my first time using pre-commit hooks, resolving the flags by the pre-commit hooks were both easy and a bit difficult at the same time. It was difficult in a sense that these are things I do not consider when coding so it's a bit tricky to figure out what it was flagging, but they're also easy to resolve once you find them (only found out that ruff can autofix issues a lot later).
+This homework was extremely difficult to work on for me. Encountered a lot of issues early on with just creating the Dockerfile and building the image because of a venv issue that was fixed by adding '--python /usr/local/bin/python'. 
+
+For the Airflow part, I have scripts that I believe should work and I've tested the individual tasks in CLI and saw them work with no problems. However, when I try to manually trigger in UI, it just keeps failing and I'm still not sure what's causing it because the logs don't really show any messages for some reason even though I've tried several things to make the logs show.
