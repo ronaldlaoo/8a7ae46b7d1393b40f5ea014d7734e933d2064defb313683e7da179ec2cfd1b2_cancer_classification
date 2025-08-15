@@ -1,5 +1,15 @@
 # 8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2_cancer_classification
 
+Pipelines run succcessfully
+Checked by: 
+```bash
+uv run src/run_pipeline.py
+```
+and 
+```bash
+docker compose exec airflow-scheduler airflow dags test ml_pipeline 2025-08-14
+```
+
 ## Project Overview  
 The main objective of this repository is to develop a production driven DS project rather than focusing on improving the model accuracy. I selected the Breast Cancer dataset from sklearn because it's small in size, readily available in sklearn.dataset, and I personally want to explore more on health applications. This classification model allows us to identify whether a mass is considered malignant or benign.
 
