@@ -91,13 +91,17 @@ The DAG uses `schedule_interval='@once'`, which means it runs a single time when
 │   │   ├── config
 │   │   ├── dags          # DAG definitions for orchestrating pipeline tasks  
 │   │   ├── logs
-│   │   ├── plugisn
+│   │   ├── plugins
+├── mlflow/
+│   ├── runs/
+│   ├── artifacts/
+
 ```
 - Notebooks folder contains the EDA and the Jupyter notebooks. I created Jupyter versions of the different stages of the pipeline to allow me to run the different sections easier for troubleshooting. The same functions can be found in the src folder and are later accessed in the run_pipeline.py file.
 - Grouped everything deployment-related under `deploy/` to keep it tidy and easier to locate anything that is for orchestration.
 - `deploy/docker/` cleanly separates container setup from everything else
 - `airflow/dags/` keeps the orchestration logic separate from the ML code
-
+- `mlflow` contains experiment logs and artifacts to stay separate from code and data to keep the workflow clean
 
 
 ## Pre-commit Configuration  
