@@ -29,9 +29,9 @@ def main():
                 model_uri=f"runs:/{run.info.run_id}/model",
                 name="breast_cancer_rf"
             )
-            print("Model registered ✅")
+            print("Model registered successfully!")
     else:
-        print("Model did not meet threshold, skipping registration ❌")
+        print("Model did not meet threshold, skipping registration")
 
 if __name__ == "__main__":
     main()
