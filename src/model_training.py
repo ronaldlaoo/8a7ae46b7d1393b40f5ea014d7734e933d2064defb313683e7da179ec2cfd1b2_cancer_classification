@@ -50,7 +50,7 @@ class CustomMLModel(mlflow.pyfunc.PythonModel):
 
     def predict(self, context, model_input: pd.DataFrame):
         """Make predictions using the trained model."""
-        # Apply preprocessing if present
+
         if self.preprocessor is not None:
             X = self.preprocessor.transform(model_input)
         else:
@@ -110,7 +110,6 @@ def ml_train_model(X_train, y_train):
             artifacts={
                 "model": model_pickle_path,
                 "feature_names": feature_names_path,
-                # Add "preprocessor": "models/preprocessor.pkl" if you have one
             },
         )
 

@@ -33,7 +33,9 @@ curl http://localhost:5000
 ``bash
 
 ## MLFlow Integration
+During model training, we used a simple grid search to get the best parameters for our RandomForestClassifier.
 
+The model evaluated based on...
 
 ## Model Drift Detection
 
