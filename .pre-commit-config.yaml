@@ -19,16 +19,9 @@ repos:
         name: Dockerfile linter
         files: ^Dockerfile$
 
-  # - repo: https://github.com/adrienverge/yamllint.git
-  #   rev: v1.32.0
-  #   hooks:
-  #     - id: yamllint
-  #       name: YAML linter
-  #       files: \.ya?ml$
-
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.3.3 # pick latest stable
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.32.0
     hooks:
-      - id: prettier
-        name: Prettier YAML formatter
+      - id: yamllint
+        name: YAML linter
         files: \.ya?ml$
