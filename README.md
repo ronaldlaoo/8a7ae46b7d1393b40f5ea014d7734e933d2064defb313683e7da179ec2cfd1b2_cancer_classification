@@ -1,8 +1,8 @@
 # 8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2_cancer_classification
 
 
-Pipelines run succcessfully
-Checked by: 
+HW2 pipelines run succcessfully by running:
+
 ```bash
 uv run src/run_pipeline.py
 ```
@@ -35,7 +35,7 @@ curl http://localhost:5000
 ## MLFlow Integration
 During model training, we used a simple grid search to get the best parameters for our RandomForestClassifier.
 
-The model evaluated based on...
+The model evaluated based on accuracy and F1 score.
 
 ## Model Drift Detection
 
@@ -54,6 +54,7 @@ The model evaluated based on...
 │   ├── model_training.py
 │   ├── evaluation.py
 │   └── run_pipeline.py
+│   └── mlflow_run_pipeline.py # File for running the pipeline with mlflow updates
 ├── deploy/
 │   ├── docker
 │   │   ├── Dockerfile    # Defines the container environment 
