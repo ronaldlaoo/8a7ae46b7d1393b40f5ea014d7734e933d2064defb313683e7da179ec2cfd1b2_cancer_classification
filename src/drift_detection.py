@@ -30,10 +30,7 @@ def detect_drift(reference_data_path: str, current_data_path: str) -> Dict[str, 
     # Drift Analysis
     report = Report(metrics=[DataDriftPreset()])
     report.run(reference_data=ref_df, current_data=cur_df)
-    result_json = report.json()
-
-    # Convert JSON string -> Python dict
-    result = json.loads(result_json)
+    result = report.as_dict()
 
     # Extract dataset-level drift
     drift_detected = result["metrics"][0]["result"]["dataset_drift"]

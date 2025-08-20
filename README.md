@@ -32,16 +32,12 @@ curl http://localhost:5000
 ```
 
 ## MLFlow Integration
-During model training, we used a simple grid search to get the best parameters for our RandomForestClassifier.
+During model training, we used a simple grid search to get the best parameters (n_estimators, max_depth, random_state) for our RandomForestClassifier.
 
-The model evaluated based on accuracy and F1 score.
+The best performing model was identified using accuracy scoring and the accuracy and F1 results are logged to MLflow.
 
-The mlflow pipeline can be run by doing:
-```bash
-uv run src/mlflow_run_pipeline.py
-```
 ## Model Drift Detection
-
+The drift detection uses evidently the drift metrics of the dataset and the features. The drift report metrics should be saved to the reports directory.
 
 ## Folder Structure
 
@@ -80,5 +76,15 @@ uv run src/mlflow_run_pipeline.py
 
 
 ## Testing Instructions
+We can test that the pipeline with MLflow integration runs successfully by checking:
+
+```bash
+uv run src/mlflow_run_pipeline.py
+```
+and running the line below to check the metrics in the UI:
+```bash
+curl http://localhost:5000
+```
 
 ## Reflection
+I feel like I had to rework most of the functions that I did for past homeworks because it's probably not setup in the best way for running a pipeline so I created new functions for MLflow. I feel that right now it's more appropriate for pipelines since it looks a bit cleaner. I'm currently still having trouble in just trying to save the Drift report as a dict because I keep getting the error that the object doesn't have the attribute even though I've already checked the instructions and the documentation to see if it's setup correctly.
