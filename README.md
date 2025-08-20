@@ -32,9 +32,8 @@ curl http://localhost:5000
 ```
 
 ## MLFlow Integration
-During model training, we used a simple grid search to get the best parameters (n_estimators, max_depth, random_state) for our RandomForestClassifier.
-
-The best performing model was identified using accuracy scoring and the accuracy and F1 results are logged to MLflow.
+During model training, we used a simple grid search to get the best parameters (n_estimators, max_depth, random_state) for our RandomForestClassifier. The best performing model was identified using accuracy scoring and the accuracy and F1 results are logged to MLflow to identify actual performance.
+In addition, the grid search allows us to systematically evaluate multiple parameter combinations and ensure that the resulting model is not only accurate but also generalizes well to unseen data. Logging these metrics in MLflow enables us to track model performance over time and compare different runs for reproducibility and future improvements.
 
 ## Model Drift Detection
 The drift detection uses evidently the drift metrics of the dataset and the features. The drift report metrics should be saved to the reports directory.
