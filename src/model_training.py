@@ -28,20 +28,14 @@ def train_model(X_train, y_train):
 
 
 class CustomMLModel(mlflow.pyfunc.PythonModel):
-    """
-    Custom MLflow PyFunc wrapper.
-    Loads the trained estimator and (optionally) a preprocessor and feature names.
-    """
-
+    """Custom MLflow PyFunc wrapper for your trained model."""
     def __init__(self):
         self.model = None
         self.preprocessor = None
         self.feature_names = None
 
     def load_context(self, context):
-        """Load model artifacts from MLflow context."""
         self.model = joblib.load(context.artifacts["model"])
-
         if "preprocessor" in context.artifacts:
             self.preprocessor = joblib.load(context.artifacts["preprocessor"])
         if "feature_names" in context.artifacts:
@@ -49,22 +43,19 @@ class CustomMLModel(mlflow.pyfunc.PythonModel):
                 self.feature_names = [ln.strip() for ln in f.readlines()]
 
     def predict(self, context, model_input: pd.DataFrame):
-        """Make predictions using the trained model."""
-
-        if self.preprocessor is not None:
-            X = self.preprocessor.transform(model_input)
-        else:
-            
-            X = model_input.values
+        X = (
+            self.preprocessor.transform(model_input)
+            if self.preprocessor is not None
+            else model_input.values
+        )
         return self.model.predict(X)
 
 
 def ml_train_model(X_train, y_train):
     """
-    Train a RandomForest (with a small grid search), log hyperparams,
+    Train a RandomForest with grid search, log hyperparameters,
     save artifacts, and log a custom PyFunc model to MLflow.
     """
-    mlflow.set_tracking_uri("http://localhost:5000")
 
     param_grid = {
         "n_estimators": [100, 200],
@@ -72,46 +63,52 @@ def ml_train_model(X_train, y_train):
         "random_state": [1, 42],
     }
 
-    with mlflow.start_run(run_name="rf-breast-cancer-pyfunc"):
-        # Tune & fit
-        base = RandomForestClassifier()
-        grid = GridSearchCV(base, param_grid=param_grid, cv=5, n_jobs=-1, refit=True)
-        grid.fit(X_train, y_train)
+    base = RandomForestClassifier()
+    grid = GridSearchCV(
+        estimator=base,
+        param_grid=param_grid,
+        cv=5,
+        scoring="accuracy",
+        n_jobs=-1,
+        refit=True,
+    )
+    grid.fit(X_train, y_train)
 
-        model = grid.best_estimator_
+    model = grid.best_estimator_
 
-        best_params = {
-            "n_estimators": grid.best_params_["n_estimators"],
-            "max_depth": grid.best_params_["max_depth"],
-            "random_state": grid.best_params_["random_state"],
-        }
-        mlflow.log_params(best_params)
-        mlflow.log_metric("cv_best_score", float(grid.best_score_))
+    best_params = {
+        "n_estimators": grid.best_params_["n_estimators"],
+        "max_depth": grid.best_params_["max_depth"],
+        "random_state": grid.best_params_["random_state"],
+    }
+    mlflow.log_params(best_params)
+    mlflow.log_metric("cv_best_score", float(grid.best_score_))
 
-        os.makedirs("models", exist_ok=True)
-        model_pickle_path = "models/model.pkl"
+    # save local artifacts
+    os.makedirs("models", exist_ok=True)
+    model_pickle_path = "models/model.pkl"
+    with open(model_pickle_path, "wb") as f:
+        pickle.dump(model, f)
 
-        with open(model_pickle_path, "wb") as f:
-            pickle.dump(model, f)
+    feature_names_path = "models/feature_names.txt"
+    cols = getattr(X_train, "columns", None)
+    with open(feature_names_path, "w") as f:
+        if cols is not None:
+            f.write("\n".join(map(str, cols)))
 
-        feature_names_path = "models/feature_names.txt"
-        cols = getattr(X_train, "columns", None)
-        with open(feature_names_path, "w") as f:
-            if cols is not None:
-                f.write("\n".join(map(str, cols)))
+    mlflow.log_artifact(model_pickle_path)
+    mlflow.log_artifact(feature_names_path)
 
-        mlflow.log_artifact(model_pickle_path)
-        mlflow.log_artifact(feature_names_path)
-
-        pyfunc_model = CustomMLModel()
-        mlflow.pyfunc.log_model(
-            artifact_path="pyfunc_model",
-            python_model=pyfunc_model,
-            artifacts={
-                "model": model_pickle_path,
-                "feature_names": feature_names_path,
-            },
-        )
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    mlflow.pyfunc.log_model(
+        artifact_path="pyfunc_model",
+        python_model=CustomMLModel(),
+        artifacts={
+            "model": model_pickle_path,
+            "feature_names": feature_names_path,
+            # "preprocessor": "models/preprocessor.pkl",  
+        },
+    )
 
     print(f"Best params: {best_params} | model saved to {model_pickle_path}")
     return model
