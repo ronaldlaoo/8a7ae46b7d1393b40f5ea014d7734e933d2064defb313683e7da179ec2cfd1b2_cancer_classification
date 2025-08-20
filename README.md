@@ -61,6 +61,7 @@ uv run src/mlflow_run_pipeline.py
 ├── deploy/
 │   ├── docker
 │   │   ├── Dockerfile    # Defines the container environment 
+│   │   ├── Dockerfile.mlflow
 │   ├── airflow
 │   │   ├── config
 │   │   ├── dags          # DAG definitions for orchestrating pipeline tasks  

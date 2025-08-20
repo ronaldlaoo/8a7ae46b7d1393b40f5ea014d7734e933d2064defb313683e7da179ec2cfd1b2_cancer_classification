@@ -57,9 +57,13 @@ def preprocess_data():
     y_test_drifted = y_test.copy()  
     logger.info("Drifted data generated successfully")
 
+    train = pd.concat([X_train, y_train], axis=1)
+    test = pd.concat([X_test, y_test], axis=1)  
     drifted_train = pd.concat([X_train_drifted, y_train], axis=1)
     drifted_test = pd.concat([X_test_drifted, y_test], axis=1)
     
+    train.to_csv(root / "data" / "train.csv", index=False)
+    test.to_csv(root / "data" / "test.csv", index=False)
     drifted_train.to_csv(root / "data" / "drifted_train.csv", index=False)
     drifted_test.to_csv(root / "data" / "drifted_test.csv", index=False)
     logger.info("Drifted data saved successfully")
