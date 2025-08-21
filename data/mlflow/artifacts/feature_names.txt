@@ -1,0 +1,465 @@
+mean radius
+mean texture
+mean perimeter
+mean area
+mean smoothness
+mean compactness
+mean concavity
+mean concave points
+mean symmetry
+mean fractal dimension
+radius error
+texture error
+perimeter error
+area error
+smoothness error
+compactness error
+concavity error
+concave points error
+symmetry error
+fractal dimension error
+worst radius
+worst texture
+worst perimeter
+worst area
+worst smoothness
+worst compactness
+worst concavity
+worst concave points
+worst symmetry
+worst fractal dimension
+mean radius*mean texture
+mean radius*mean perimeter
+mean radius*mean area
+mean radius*mean smoothness
+mean radius*mean compactness
+mean radius*mean concavity
+mean radius*mean concave points
+mean radius*mean symmetry
+mean radius*mean fractal dimension
+mean radius*radius error
+mean radius*texture error
+mean radius*perimeter error
+mean radius*area error
+mean radius*smoothness error
+mean radius*compactness error
+mean radius*concavity error
+mean radius*concave points error
+mean radius*symmetry error
+mean radius*fractal dimension error
+mean radius*worst radius
+mean radius*worst texture
+mean radius*worst perimeter
+mean radius*worst area
+mean radius*worst smoothness
+mean radius*worst compactness
+mean radius*worst concavity
+mean radius*worst concave points
+mean radius*worst symmetry
+mean radius*worst fractal dimension
+mean texture*mean perimeter
+mean texture*mean area
+mean texture*mean smoothness
+mean texture*mean compactness
+mean texture*mean concavity
+mean texture*mean concave points
+mean texture*mean symmetry
+mean texture*mean fractal dimension
+mean texture*radius error
+mean texture*texture error
+mean texture*perimeter error
+mean texture*area error
+mean texture*smoothness error
+mean texture*compactness error
+mean texture*concavity error
+mean texture*concave points error
+mean texture*symmetry error
+mean texture*fractal dimension error
+mean texture*worst radius
+mean texture*worst texture
+mean texture*worst perimeter
+mean texture*worst area
+mean texture*worst smoothness
+mean texture*worst compactness
+mean texture*worst concavity
+mean texture*worst concave points
+mean texture*worst symmetry
+mean texture*worst fractal dimension
+mean perimeter*mean area
+mean perimeter*mean smoothness
+mean perimeter*mean compactness
+mean perimeter*mean concavity
+mean perimeter*mean concave points
+mean perimeter*mean symmetry
+mean perimeter*mean fractal dimension
+mean perimeter*radius error
+mean perimeter*texture error
+mean perimeter*perimeter error
+mean perimeter*area error
+mean perimeter*smoothness error
+mean perimeter*compactness error
+mean perimeter*concavity error
+mean perimeter*concave points error
+mean perimeter*symmetry error
+mean perimeter*fractal dimension error
+mean perimeter*worst radius
+mean perimeter*worst texture
+mean perimeter*worst perimeter
+mean perimeter*worst area
+mean perimeter*worst smoothness
+mean perimeter*worst compactness
+mean perimeter*worst concavity
+mean perimeter*worst concave points
+mean perimeter*worst symmetry
+mean perimeter*worst fractal dimension
+mean area*mean smoothness
+mean area*mean compactness
+mean area*mean concavity
+mean area*mean concave points
+mean area*mean symmetry
+mean area*mean fractal dimension
+mean area*radius error
+mean area*texture error
+mean area*perimeter error
+mean area*area error
+mean area*smoothness error
+mean area*compactness error
+mean area*concavity error
+mean area*concave points error
+mean area*symmetry error
+mean area*fractal dimension error
+mean area*worst radius
+mean area*worst texture
+mean area*worst perimeter
+mean area*worst area
+mean area*worst smoothness
+mean area*worst compactness
+mean area*worst concavity
+mean area*worst concave points
+mean area*worst symmetry
+mean area*worst fractal dimension
+mean smoothness*mean compactness
+mean smoothness*mean concavity
+mean smoothness*mean concave points
+mean smoothness*mean symmetry
+mean smoothness*mean fractal dimension
+mean smoothness*radius error
+mean smoothness*texture error
+mean smoothness*perimeter error
+mean smoothness*area error
+mean smoothness*smoothness error
+mean smoothness*compactness error
+mean smoothness*concavity error
+mean smoothness*concave points error
+mean smoothness*symmetry error
+mean smoothness*fractal dimension error
+mean smoothness*worst radius
+mean smoothness*worst texture
+mean smoothness*worst perimeter
+mean smoothness*worst area
+mean smoothness*worst smoothness
+mean smoothness*worst compactness
+mean smoothness*worst concavity
+mean smoothness*worst concave points
+mean smoothness*worst symmetry
+mean smoothness*worst fractal dimension
+mean compactness*mean concavity
+mean compactness*mean concave points
+mean compactness*mean symmetry
+mean compactness*mean fractal dimension
+mean compactness*radius error
+mean compactness*texture error
+mean compactness*perimeter error
+mean compactness*area error
+mean compactness*smoothness error
+mean compactness*compactness error
+mean compactness*concavity error
+mean compactness*concave points error
+mean compactness*symmetry error
+mean compactness*fractal dimension error
+mean compactness*worst radius
+mean compactness*worst texture
+mean compactness*worst perimeter
+mean compactness*worst area
+mean compactness*worst smoothness
+mean compactness*worst compactness
+mean compactness*worst concavity
+mean compactness*worst concave points
+mean compactness*worst symmetry
+mean compactness*worst fractal dimension
+mean concavity*mean concave points
+mean concavity*mean symmetry
+mean concavity*mean fractal dimension
+mean concavity*radius error
+mean concavity*texture error
+mean concavity*perimeter error
+mean concavity*area error
+mean concavity*smoothness error
+mean concavity*compactness error
+mean concavity*concavity error
+mean concavity*concave points error
+mean concavity*symmetry error
+mean concavity*fractal dimension error
+mean concavity*worst radius
+mean concavity*worst texture
+mean concavity*worst perimeter
+mean concavity*worst area
+mean concavity*worst smoothness
+mean concavity*worst compactness
+mean concavity*worst concavity
+mean concavity*worst concave points
+mean concavity*worst symmetry
+mean concavity*worst fractal dimension
+mean concave points*mean symmetry
+mean concave points*mean fractal dimension
+mean concave points*radius error
+mean concave points*texture error
+mean concave points*perimeter error
+mean concave points*area error
+mean concave points*smoothness error
+mean concave points*compactness error
+mean concave points*concavity error
+mean concave points*concave points error
+mean concave points*symmetry error
+mean concave points*fractal dimension error
+mean concave points*worst radius
+mean concave points*worst texture
+mean concave points*worst perimeter
+mean concave points*worst area
+mean concave points*worst smoothness
+mean concave points*worst compactness
+mean concave points*worst concavity
+mean concave points*worst concave points
+mean concave points*worst symmetry
+mean concave points*worst fractal dimension
+mean symmetry*mean fractal dimension
+mean symmetry*radius error
+mean symmetry*texture error
+mean symmetry*perimeter error
+mean symmetry*area error
+mean symmetry*smoothness error
+mean symmetry*compactness error
+mean symmetry*concavity error
+mean symmetry*concave points error
+mean symmetry*symmetry error
+mean symmetry*fractal dimension error
+mean symmetry*worst radius
+mean symmetry*worst texture
+mean symmetry*worst perimeter
+mean symmetry*worst area
+mean symmetry*worst smoothness
+mean symmetry*worst compactness
+mean symmetry*worst concavity
+mean symmetry*worst concave points
+mean symmetry*worst symmetry
+mean symmetry*worst fractal dimension
+mean fractal dimension*radius error
+mean fractal dimension*texture error
+mean fractal dimension*perimeter error
+mean fractal dimension*area error
+mean fractal dimension*smoothness error
+mean fractal dimension*compactness error
+mean fractal dimension*concavity error
+mean fractal dimension*concave points error
+mean fractal dimension*symmetry error
+mean fractal dimension*fractal dimension error
+mean fractal dimension*worst radius
+mean fractal dimension*worst texture
+mean fractal dimension*worst perimeter
+mean fractal dimension*worst area
+mean fractal dimension*worst smoothness
+mean fractal dimension*worst compactness
+mean fractal dimension*worst concavity
+mean fractal dimension*worst concave points
+mean fractal dimension*worst symmetry
+mean fractal dimension*worst fractal dimension
+radius error*texture error
+radius error*perimeter error
+radius error*area error
+radius error*smoothness error
+radius error*compactness error
+radius error*concavity error
+radius error*concave points error
+radius error*symmetry error
+radius error*fractal dimension error
+radius error*worst radius
+radius error*worst texture
+radius error*worst perimeter
+radius error*worst area
+radius error*worst smoothness
+radius error*worst compactness
+radius error*worst concavity
+radius error*worst concave points
+radius error*worst symmetry
+radius error*worst fractal dimension
+texture error*perimeter error
+texture error*area error
+texture error*smoothness error
+texture error*compactness error
+texture error*concavity error
+texture error*concave points error
+texture error*symmetry error
+texture error*fractal dimension error
+texture error*worst radius
+texture error*worst texture
+texture error*worst perimeter
+texture error*worst area
+texture error*worst smoothness
+texture error*worst compactness
+texture error*worst concavity
+texture error*worst concave points
+texture error*worst symmetry
+texture error*worst fractal dimension
+perimeter error*area error
+perimeter error*smoothness error
+perimeter error*compactness error
+perimeter error*concavity error
+perimeter error*concave points error
+perimeter error*symmetry error
+perimeter error*fractal dimension error
+perimeter error*worst radius
+perimeter error*worst texture
+perimeter error*worst perimeter
+perimeter error*worst area
+perimeter error*worst smoothness
+perimeter error*worst compactness
+perimeter error*worst concavity
+perimeter error*worst concave points
+perimeter error*worst symmetry
+perimeter error*worst fractal dimension
+area error*smoothness error
+area error*compactness error
+area error*concavity error
+area error*concave points error
+area error*symmetry error
+area error*fractal dimension error
+area error*worst radius
+area error*worst texture
+area error*worst perimeter
+area error*worst area
+area error*worst smoothness
+area error*worst compactness
+area error*worst concavity
+area error*worst concave points
+area error*worst symmetry
+area error*worst fractal dimension
+smoothness error*compactness error
+smoothness error*concavity error
+smoothness error*concave points error
+smoothness error*symmetry error
+smoothness error*fractal dimension error
+smoothness error*worst radius
+smoothness error*worst texture
+smoothness error*worst perimeter
+smoothness error*worst area
+smoothness error*worst smoothness
+smoothness error*worst compactness
+smoothness error*worst concavity
+smoothness error*worst concave points
+smoothness error*worst symmetry
+smoothness error*worst fractal dimension
+compactness error*concavity error
+compactness error*concave points error
+compactness error*symmetry error
+compactness error*fractal dimension error
+compactness error*worst radius
+compactness error*worst texture
+compactness error*worst perimeter
+compactness error*worst area
+compactness error*worst smoothness
+compactness error*worst compactness
+compactness error*worst concavity
+compactness error*worst concave points
+compactness error*worst symmetry
+compactness error*worst fractal dimension
+concavity error*concave points error
+concavity error*symmetry error
+concavity error*fractal dimension error
+concavity error*worst radius
+concavity error*worst texture
+concavity error*worst perimeter
+concavity error*worst area
+concavity error*worst smoothness
+concavity error*worst compactness
+concavity error*worst concavity
+concavity error*worst concave points
+concavity error*worst symmetry
+concavity error*worst fractal dimension
+concave points error*symmetry error
+concave points error*fractal dimension error
+concave points error*worst radius
+concave points error*worst texture
+concave points error*worst perimeter
+concave points error*worst area
+concave points error*worst smoothness
+concave points error*worst compactness
+concave points error*worst concavity
+concave points error*worst concave points
+concave points error*worst symmetry
+concave points error*worst fractal dimension
+symmetry error*fractal dimension error
+symmetry error*worst radius
+symmetry error*worst texture
+symmetry error*worst perimeter
+symmetry error*worst area
+symmetry error*worst smoothness
+symmetry error*worst compactness
+symmetry error*worst concavity
+symmetry error*worst concave points
+symmetry error*worst symmetry
+symmetry error*worst fractal dimension
+fractal dimension error*worst radius
+fractal dimension error*worst texture
+fractal dimension error*worst perimeter
+fractal dimension error*worst area
+fractal dimension error*worst smoothness
+fractal dimension error*worst compactness
+fractal dimension error*worst concavity
+fractal dimension error*worst concave points
+fractal dimension error*worst symmetry
+fractal dimension error*worst fractal dimension
+worst radius*worst texture
+worst radius*worst perimeter
+worst radius*worst area
+worst radius*worst smoothness
+worst radius*worst compactness
+worst radius*worst concavity
+worst radius*worst concave points
+worst radius*worst symmetry
+worst radius*worst fractal dimension
+worst texture*worst perimeter
+worst texture*worst area
+worst texture*worst smoothness
+worst texture*worst compactness
+worst texture*worst concavity
+worst texture*worst concave points
+worst texture*worst symmetry
+worst texture*worst fractal dimension
+worst perimeter*worst area
+worst perimeter*worst smoothness
+worst perimeter*worst compactness
+worst perimeter*worst concavity
+worst perimeter*worst concave points
+worst perimeter*worst symmetry
+worst perimeter*worst fractal dimension
+worst area*worst smoothness
+worst area*worst compactness
+worst area*worst concavity
+worst area*worst concave points
+worst area*worst symmetry
+worst area*worst fractal dimension
+worst smoothness*worst compactness
+worst smoothness*worst concavity
+worst smoothness*worst concave points
+worst smoothness*worst symmetry
+worst smoothness*worst fractal dimension
+worst compactness*worst concavity
+worst compactness*worst concave points
+worst compactness*worst symmetry
+worst compactness*worst fractal dimension
+worst concavity*worst concave points
+worst concavity*worst symmetry
+worst concavity*worst fractal dimension
+worst concave points*worst symmetry
+worst concave points*worst fractal dimension
+worst symmetry*worst fractal dimension

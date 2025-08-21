@@ -6,9 +6,23 @@ from typing import Dict, Any
 import json
 from loguru import logger
 
+# def get_root():
+#    root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / ".git").exists())
+#    return root
+
+import os
+
 def get_root():
-   root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / ".git").exists())
-   return root
+    # Prefer env var AIRFLOW_HOME or project root inside container
+    if "AIRFLOW_HOME" in os.environ:
+        return Path(os.environ["AIRFLOW_HOME"])
+    # fallback: mounted /opt/airflow path
+    airflow_path = Path("/opt/airflow")
+    if airflow_path.exists():
+        return airflow_path
+    # fallback to git detection (for local dev)
+    return next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / ".git").exists())
+
 
 def detect_drift(reference_data_path: str, current_data_path: str) -> Dict[str, Any]:
     root = get_root()

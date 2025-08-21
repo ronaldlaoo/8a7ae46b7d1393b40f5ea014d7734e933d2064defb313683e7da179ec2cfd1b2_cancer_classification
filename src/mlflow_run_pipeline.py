@@ -32,7 +32,7 @@ def main():
 
         # Evaluate
         metrics = ml_evaluate_model(model, X_test, y_test)
-
+        
         # Baseline drift: train vs test
         baseline_drift_results = detect_drift("data/train.csv", "data/test.csv")
         mlflow.log_param("baseline_drift_detected", baseline_drift_results["drift_detected"])
@@ -40,14 +40,6 @@ def main():
 
         if baseline_drift_results["drift_detected"]:
             raise ValueError("Baseline data drift detected (train vs test)! Retraining required.")
-
-        # Drifted drift: test vs drifted_test
-        drifted_drift_results = detect_drift("data/test.csv", "data/drifted_test.csv")
-        mlflow.log_param("drifted_drift_detected", drifted_drift_results["drift_detected"])
-        mlflow.log_metric("drifted_overall_drift_score", drifted_drift_results["overall_drift_score"])
-
-        if drifted_drift_results["drift_detected"]:
-            raise ValueError("Drift detected in DRIFTED test set! Retraining required.")
         
         # Threshold check (classification: accuracy > 0.8)
         if metrics["accuracy"] > 0.8:
@@ -59,7 +51,14 @@ def main():
         else:
             logger.info("Model did not meet threshold")
 
+        # Drifted drift: test vs drifted_test
+        drifted_drift_results = detect_drift("data/test.csv", "data/drifted_test.csv")
+        mlflow.log_param("drifted_drift_detected", drifted_drift_results["drift_detected"])
+        mlflow.log_metric("drifted_overall_drift_score", drifted_drift_results["overall_drift_score"])
 
+        if drifted_drift_results["drift_detected"]:
+            raise ValueError("Drift detected in DRIFTED test set! Retraining required.")
+        
 if __name__ == "__main__":
     main()
     logger.info("Pipeline completed successfully.")

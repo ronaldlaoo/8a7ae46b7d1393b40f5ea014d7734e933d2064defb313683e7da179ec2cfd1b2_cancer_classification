@@ -33,8 +33,19 @@ def load_dataset():
 
 
 def get_root():
-   root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / ".git").exists())
-   return root
+    # Prefer env var AIRFLOW_HOME or project root inside container
+    if "AIRFLOW_HOME" in os.environ:
+        return Path(os.environ["AIRFLOW_HOME"])
+    # fallback: mounted /opt/airflow path
+    airflow_path = Path("/opt/airflow")
+    if airflow_path.exists():
+        return airflow_path
+    # fallback to git detection (for local dev)
+    return next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / ".git").exists())
+
+# def get_root():
+#    root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / ".git").exists())
+#    return root
 
 
 def preprocess_data():

@@ -47,6 +47,7 @@ x-airflow-common:
     - ./data:/opt/airflow/data
     - ./models:/opt/airflow/models
     - ./work:/opt/airflow/work
+    - ./reports:/opt/airflow/reports
   user: "50000:0"
   depends_on:
     &airflow-common-depends-on
