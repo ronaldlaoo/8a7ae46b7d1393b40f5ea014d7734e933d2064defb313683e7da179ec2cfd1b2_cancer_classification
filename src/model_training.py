@@ -54,15 +54,16 @@ class CustomMLModel(mlflow.pyfunc.PythonModel):
 def ml_train_model(X_train, y_train):
     """
     Train a RandomForest with grid search, log hyperparameters,
-    save artifacts, and log a custom PyFunc model to MLflow.
+    save artifacts to mlflow/artifacts/, and log model to MLflow.
     """
-
+    # Define parameter grid
     param_grid = {
         "n_estimators": [100, 200],
         "max_depth": [5, 10],
         "random_state": [1, 42],
     }
 
+    # Train with GridSearchCV
     base = RandomForestClassifier()
     grid = GridSearchCV(
         estimator=base,
@@ -73,32 +74,29 @@ def ml_train_model(X_train, y_train):
         refit=True,
     )
     grid.fit(X_train, y_train)
-
     model = grid.best_estimator_
 
-    best_params = {
-        "n_estimators": grid.best_params_["n_estimators"],
-        "max_depth": grid.best_params_["max_depth"],
-        "random_state": grid.best_params_["random_state"],
-    }
+    best_params = grid.best_params_
     mlflow.log_params(best_params)
     mlflow.log_metric("cv_best_score", float(grid.best_score_))
 
-    # save local artifacts
-    os.makedirs("models", exist_ok=True)
-    model_pickle_path = "models/model.pkl"
+    # Save artifacts inside mlflow/artifacts
+    os.makedirs("mlflow/artifacts", exist_ok=True)
+
+    model_pickle_path = "mlflow/artifacts/model.pkl"
     with open(model_pickle_path, "wb") as f:
         pickle.dump(model, f)
 
-    feature_names_path = "models/feature_names.txt"
-    cols = getattr(X_train, "columns", None)
-    with open(feature_names_path, "w") as f:
-        if cols is not None:
-            f.write("\n".join(map(str, cols)))
+    feature_names_path = "mlflow/artifacts/feature_names.txt"
+    if hasattr(X_train, "columns"):
+        with open(feature_names_path, "w") as f:
+            f.write("\n".join(map(str, X_train.columns)))
 
-    mlflow.log_artifact(model_pickle_path)
-    mlflow.log_artifact(feature_names_path)
+    # Log artifacts so they appear in the MLflow UI
+    mlflow.log_artifact(model_pickle_path, artifact_path="artifacts")
+    mlflow.log_artifact(feature_names_path, artifact_path="artifacts")
 
+    # Log model in MLflow
     mlflow.sklearn.log_model(model, artifact_path="model")
     mlflow.pyfunc.log_model(
         artifact_path="pyfunc_model",
@@ -106,7 +104,6 @@ def ml_train_model(X_train, y_train):
         artifacts={
             "model": model_pickle_path,
             "feature_names": feature_names_path,
-            # "preprocessor": "models/preprocessor.pkl",  
         },
     )
 
