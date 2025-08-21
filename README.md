@@ -80,7 +80,7 @@ We can test that the pipeline with MLflow integration runs successfully by check
 ```bash
 uv run src/mlflow_run_pipeline.py
 ```
-and running the line below to check the metrics in the UI:
+and running the line below to verify. 
 ```bash
 curl http://localhost:5000
 ```

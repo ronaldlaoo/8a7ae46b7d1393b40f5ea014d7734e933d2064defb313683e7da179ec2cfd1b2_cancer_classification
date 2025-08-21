@@ -3,7 +3,7 @@ name = "8a7ae46b7d1393b40f5ea014d7734e933d2064defb313683e7da179ec2cfd1b2-cancer-
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = "==3.12.*"
 dependencies = [
     "loguru>=0.7.3",
     "matplotlib>=3.10.3",
