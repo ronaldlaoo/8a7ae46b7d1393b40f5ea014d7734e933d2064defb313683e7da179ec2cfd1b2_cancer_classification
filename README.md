@@ -86,4 +86,6 @@ curl http://localhost:5000
 ```
 
 ## Reflection
-I feel like I had to rework most of the functions that I did for past homeworks because it's probably not setup in the best way for running a pipeline so I created new functions for MLflow. I feel that right now it's more appropriate for pipelines since it looks a bit cleaner. I'm currently still having trouble in just trying to save the Drift report as a dict because I keep getting the error that the object doesn't have the attribute even though I've already checked the instructions and the documentation to see if it's setup correctly.
+I feel like I had to rework most of the functions that I did for past homeworks because it's probably not setup in the best way for running a pipeline so I created new functions for MLflow. I feel that right now it's more appropriate for pipelines since it looks a bit cleaner. 
+
+I'm currently still having trouble in just trying to save the Drift report as a dict because I keep getting the error that the object doesn't have the attribute even though I've already checked the instructions and the documentation to see if it's setup correctly. UPDATE: I was able to make it work by just saving the result snapshot as a variable and then using dict() to get the results. Still took a lot of time and I think I've tried it previously but was getting an error so now that it works, I'm a bit lost as to why it fixed itself. 

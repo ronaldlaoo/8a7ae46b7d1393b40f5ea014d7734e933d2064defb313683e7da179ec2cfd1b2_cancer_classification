@@ -1,5 +1,6 @@
-import pickle
+import json
 import os
+import pickle
 from sklearn.metrics import accuracy_score, f1_score
 import mlflow
 
@@ -38,7 +39,7 @@ def evaluate_model(model_path, X_test, y_test):
 def ml_evaluate_model(model, X_test, y_test):
     """
     Evaluate a trained model using accuracy and F1 score,
-    log metrics to MLflow, and return results.
+    log metrics to MLflow, and save results to reports/evaluation_results.json.
 
     Parameters
     ----------
@@ -65,6 +66,12 @@ def ml_evaluate_model(model, X_test, y_test):
     mlflow.log_metric("accuracy", acc)
     mlflow.log_metric("f1_score", f1)
 
+    # 4. Save results to reports/evaluation_results.json
+    results = {"accuracy": acc, "f1_score": f1}
+    os.makedirs("reports", exist_ok=True)
+    with open("reports/evaluation_results.json", "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2, ensure_ascii=False)
+
     print(f"Accuracy: {acc:.4f}, F1 Score: {f1:.4f}")
 
-    return {"accuracy": acc, "f1_score": f1}
+    return results
