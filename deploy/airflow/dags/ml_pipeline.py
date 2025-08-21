@@ -1,132 +1,121 @@
+# deploy/airflow/dags/ml_pipeline_dag.py
 from datetime import datetime, timedelta
 from pathlib import Path
-import joblib
-import pickle
-import sys
-
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+import json
+import mlflow
 
 from airflow import DAG
-from airflow.operators.python import PythonOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.empty import EmptyOperator
 
-from feature_engineering import add_features
-from loguru import logger
 
-# Set up logging
-logger.remove()
-logger.add(sys.stdout, level="DEBUG", enqueue=True, backtrace=True, diagnose=True)
+from src.data_preprocessing import preprocess_data
+from src.feature_engineering import add_features
+from src.model_training import ml_train_model
+from src.evaluation import ml_evaluate_model
+from src.drift_detection import detect_drift
+
+
+mlflow.set_tracking_uri("http://mlflow:5000")
+mlflow.set_experiment("cancer_pipeline_airflow")
 
 # Paths
-DATA_PATH = Path("/opt/airflow/data/raw/cancer_dataset.csv")
-SPLIT_PATH = Path("/opt/airflow/work/split.joblib")
-MODEL_PATH = Path("/opt/airflow/models/model.pkl")
-REPORT_PATH = Path("/opt/airflow/reports/metrics.txt")
+REPORTS_PATH = Path("reports") / "drift_report.json"
 
 
-def t_preprocess():
-    """
-    Preprocess the cancer dataset by scaling features and splitting into train/test sets.
-
-    Loads data from `DATA_PATH`, scales features using `StandardScaler`,
-    and saves the split dataset to `SPLIT_PATH` using joblib.
-
-    Returns
-    -------
-    None
-    """
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.model_selection import train_test_split
-
-    logger.info("Reading dataset from {}", DATA_PATH)
-    df = pd.read_csv(DATA_PATH).drop(columns=["Unnamed: 0"])
-    X = df.drop(columns=["target"])
-    y = df["target"]
-
-    scaler = StandardScaler()
-    X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
-
-    SPLIT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump((X_train, X_test, y_train, y_test), SPLIT_PATH)
-    logger.info("Saved split to {}", SPLIT_PATH)
+def task_preprocess():
+    return preprocess_data()
 
 
-def t_train_model():
-    """
-    Train a RandomForestClassifier on the preprocessed training data.
-
-    Loads training data from `SPLIT_PATH`, applies feature engineering,
-    and saves the trained model to `MODEL_PATH` using pickle.
-
-    Returns
-    -------
-    None
-    """
-    X_train, _, y_train, _ = joblib.load(SPLIT_PATH)
-    X_train = add_features(X_train)
-
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
-    model.fit(X_train, y_train)
-
-    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(MODEL_PATH, "wb") as f:
-        pickle.dump(model, f)
-
-    logger.info("Model trained and saved to {}", MODEL_PATH)
+def task_feature_engineering(ti):
+    X_train, X_test, y_train, y_test, *_ = ti.xcom_pull(task_ids="preprocess_data")
+    return add_features(X_train).to_dict(), add_features(X_test).to_dict(), y_train.tolist(), y_test.tolist()
 
 
-def t_evaluate_model():
-    """
-    Evaluate the trained model on the test set.
+def task_train(ti):
+    X_train_dict, X_test_dict, y_train, y_test = ti.xcom_pull(task_ids="feature_engineering")
+    import pandas as pd
+    X_train = pd.DataFrame(X_train_dict)
+    model = ml_train_model(X_train, y_train)
+    return model
 
-    Loads the test set and trained model from `SPLIT_PATH` and `MODEL_PATH` respectively,
-    applies feature engineering, computes accuracy, and saves the result to `REPORT_PATH`.
 
-    Returns
-    -------
-    None
-    """
-    _, X_test, _, y_test = joblib.load(SPLIT_PATH)
-    X_test = add_features(X_test)
+def task_evaluate(ti):
+    model = ti.xcom_pull(task_ids="train_model")
+    _, X_test_dict, _, y_test = ti.xcom_pull(task_ids="feature_engineering")
+    import pandas as pd
+    X_test = pd.DataFrame(X_test_dict)
+    return ml_evaluate_model(model, X_test, y_test)
 
-    with open(MODEL_PATH, "rb") as f:
-        model = pickle.load(f)
 
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
+def task_drift():
+    return detect_drift("data/test.csv", "data/drifted_test.csv")
 
-    logger.info("Model accuracy: {:.2f}%", accuracy * 100)
 
-    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(REPORT_PATH, "w") as f:
-        f.write(f"Accuracy: {accuracy:.4f}\n")
+def branch_on_drift():
+    with open(REPORTS_PATH, "r") as f:
+        drift_result = json.load(f)
+    return "retrain_model" if drift_result["drift_detected"] else "pipeline_complete"
 
-    logger.info("Saved evaluation report to {}", REPORT_PATH)
+
+def task_retrain():
+    from pathlib import Path
+    import pandas as pd
+
+    root = Path(__file__).resolve().parents[2]  
+    train = pd.read_csv(root / "data" / "train.csv")
+    X = train.drop(columns=["target"])
+    y = train["target"]
+    return ml_train_model(X, y)
 
 
 with DAG(
-    dag_id="ml_pipeline",
-    start_date=datetime(2025, 8, 1),
-    schedule="@once",
+    dag_id="ml_pipeline_dag",
+    default_args={"owner": "airflow", "retries": 1, "retry_delay": timedelta(minutes=5)},
+    description="ML pipeline with drift detection and retraining",
+    schedule_interval=None,
+    start_date=datetime(2025, 1, 1),
     catchup=False,
-    default_args={"retries": 3, "retry_delay": timedelta(minutes=1)},
 ) as dag:
 
-    preprocess = PythonOperator(
-        task_id="preprocess",
-        python_callable=t_preprocess,
+    preprocess_task = PythonOperator(
+        task_id="preprocess_data",
+        python_callable=task_preprocess,
     )
 
-    train_model = PythonOperator(
+    feature_engineering_task = PythonOperator(
+        task_id="feature_engineering",
+        python_callable=task_feature_engineering,
+    )
+
+    train_task = PythonOperator(
         task_id="train_model",
-        python_callable=t_train_model,
+        python_callable=task_train,
     )
 
-    evaluate_model = PythonOperator(
+    evaluate_task = PythonOperator(
         task_id="evaluate_model",
-        python_callable=t_evaluate_model,
+        python_callable=task_evaluate,
     )
 
-    preprocess >> train_model >> evaluate_model
+    drift_task = PythonOperator(
+        task_id="drift_detection",
+        python_callable=task_drift,
+    )
+
+    branch_task = BranchPythonOperator(
+        task_id="branch_on_drift",
+        python_callable=branch_on_drift,
+    )
+
+    retrain_task = PythonOperator(
+        task_id="retrain_model",
+        python_callable=task_retrain,
+    )
+
+    complete_task = EmptyOperator(task_id="pipeline_complete")
+
+    # Dependencies
+    preprocess_task >> feature_engineering_task >> train_task >> evaluate_task
+    evaluate_task >> drift_task >> branch_task
+    branch_task >> [retrain_task, complete_task]

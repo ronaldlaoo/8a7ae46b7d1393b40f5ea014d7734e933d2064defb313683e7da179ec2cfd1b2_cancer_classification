@@ -51,7 +51,7 @@ def preprocess_data():
 
     X_train_drifted = X_train.copy()
     X_test_drifted = X_test.copy()
-    X_train_drifted *= 1.2  
+    X_train_drifted *= 1.2 
     X_test_drifted *= 1.2
     y_train_drifted = y_train.copy()
     y_test_drifted = y_test.copy()  
