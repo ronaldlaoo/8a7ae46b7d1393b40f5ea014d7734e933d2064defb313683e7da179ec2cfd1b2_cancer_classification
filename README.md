@@ -4,8 +4,9 @@
 The main objective of this repository is to develop a production driven DS project rather than focusing on improving the model accuracy. I selected the Breast Cancer dataset from sklearn because it's small in size, readily available in sklearn.dataset, and I personally want to explore more on health applications. This classification model allows us to identify whether a mass is considered malignant or benign.
 
 
-
 ## Setup Instructions  
+To setup, we need to update our `pyproject.toml` with the necessary dependencies (mlflow, evidently, psycopg2-binary). Then we need to configure our `docker-compose.yaml` to include MLFlow and create a separate `Dockerfile.mlflow` to install our dependencies, directories and environment variables. 
+
 Verify MLflow installation and setup by running:
 ```bash
 docker-compose up -d
@@ -17,8 +18,9 @@ curl http://localhost:5000
 ```
 
 ## MLFlow Integration
-During model training, we used a simple grid search to get the best parameters (n_estimators, max_depth, random_state) for our RandomForestClassifier. The best performing model was identified using accuracy scoring and the accuracy and F1 results are logged to MLflow to identify actual performance.
-In addition, the grid search allows us to systematically evaluate multiple parameter combinations and ensure that the resulting model is not only accurate but also generalizes well to unseen data. Logging these metrics in MLflow enables us to track model performance over time and compare different runs for reproducibility and future improvements.
+MLflow is a useful tool to enable users to track experiments performance and artifacts during training to make it easier to assess and reproduce. It also allows users to register models that satisfy a threshold set beforehand, ensuring good performance and these models are stored in the model registry where each version can be tracked. MLflow also has tracking UI that displays a user-friendly dashboard for easier browsing of results and comparison of different registered models. 
+
+During model training, we used a simple grid search to get the best parameters (n_estimators, max_depth, random_state) for our RandomForestClassifier. The best performing model was identified using accuracy scoring and the accuracy and F1 results are logged to MLflow to identify actual performance. In addition, the grid search allows us to systematically evaluate multiple parameter combinations and ensure that the resulting model is not only accurate but also generalizes well to unseen data. Logging these metrics in MLflow enables us to track model performance over time and compare different runs for reproducibility and future improvements.
 
 ## Model Drift Detection
 The drift detection uses evidently the drift metrics of the dataset and the features. The drift report metrics should be saved to the reports directory.
@@ -35,6 +37,7 @@ Models are only registered when the drift threshold is not exceeded between the 
 ├── models/                # Saved trained model
 ├── reports/               # Evaluation metrics
 ├── src/
+│   ├── data_ingestion.py       # Saves the dataset to data directory
 │   ├── data_preprocessing.py
 │   ├── feature_engineering.py
 │   ├── model_training.py
@@ -83,3 +86,5 @@ curl http://localhost:5000
 I feel like I had to rework most of the functions that I did for past homeworks because it's probably not setup in the best way for running a pipeline so I created new functions for MLflow. I feel that right now it's more appropriate for pipelines since it looks a bit cleaner. 
 
 I'm currently still having trouble in just trying to save the Drift report as a dict because I keep getting the error that the object doesn't have the attribute even though I've already checked the instructions and the documentation to see if it's setup correctly. UPDATE: I was able to make it work by just saving the result snapshot as a variable and then using dict() to get the results. The instruction of using as_dict() was bit confusing for this part and even the documentation is a bit incomplete since I still had errors when I tried to just mimic the process there.
+
+Also since I basically had to recreate some of my functions from the previous versions to be cleaner, I feel like I had a slightly better experience with making the airflow dag work and a better understanding on how to debug from my end.
