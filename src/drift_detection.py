@@ -4,6 +4,7 @@ from evidently.presets import DataDriftPreset
 from pathlib import Path
 from typing import Dict, Any
 import json
+from loguru import logger
 
 def get_root():
    root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / ".git").exists())
@@ -18,7 +19,7 @@ def detect_drift(reference_data_path: str, current_data_path: str) -> Dict[str, 
     report = Report([DataDriftPreset()])
     snapshot = report.run(reference_data=ref_df, current_data=cur_df)
     result = snapshot.dict()
-
+    logger.info("Drift detection completed")
     # Each metric entry has "result" key
     metric_result = result["metrics"][0].get("result", {})
 
@@ -54,5 +55,6 @@ def detect_drift(reference_data_path: str, current_data_path: str) -> Dict[str, 
     reports_path.mkdir(parents=True, exist_ok=True)
     with (reports_path / "drift_report.json").open("w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
-
+        
+    logger.info("Drift report saved to reports/drift_report.json")
     return payload
